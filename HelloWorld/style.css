@@ -62,7 +62,19 @@ p {
 }
 
 /*user input */
-#userInput { 
-    display: none;
-    margin: auto;
-  }
+#userInput {
+    display: inline-block;
+    width: 150px;
+    height: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none; /* Remove outline when focused */
+    transition: border-color 0.3s ease; /* Add smooth transition for border color */
+}
+
+#userInput:focus {
+    border-color: dodgerblue; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5); /* Add a subtle shadow on focus */
+}
