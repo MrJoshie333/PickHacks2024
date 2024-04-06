@@ -15,7 +15,7 @@ chrome.contextMenus.onClicked.addListener(genericOnClick);
 // A generic onclick callback function.
 function genericOnClick(info) {
 
-  let selectedText = "You're Mother" // TODO: Figure out how to get the selected text
+  let selectedText = info.selectionText
 
   switch (info.menuItemId) {
     case 'caesar':
