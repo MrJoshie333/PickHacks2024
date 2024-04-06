@@ -12,8 +12,8 @@ function genericOnClick(info) {
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 400,
-        height: 200
+        width: 600,
+        height: 300
       });
       decryptedText = "Enter a shift value"
       break;
@@ -21,16 +21,16 @@ function genericOnClick(info) {
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 400,
-        height: 200
+        width: 600,
+        height: 300
       });
       break;
     case 'railfence':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 400,
-        height: 200
+        width: 600,
+        height: 300
       });
       break;
     
