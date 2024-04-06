@@ -1,5 +1,62 @@
-// A generic onclick callback function.
-chrome.contextMenus.onClicked.addListener(genericOnClick);
+chrome.runtime.onInstalled.addListener(function () {
+  // Create one test item for each context type.
+  let contexts = [
+    'page',
+    'selection',
+    'link',
+    'editable',
+    'image',
+    'video',
+    'audio'
+  ];
+
+  chrome.contextMenus.create({
+    title: 'Super Decrypt',
+    contexts: ['selection'],
+    id: 'decrypt'
+  });
+
+  // Create a parent item and two children.
+  let parent = chrome.contextMenus.create({
+    title: 'Choose a Cipher',
+    contexts: ['selection'], // Add 'selection' context here
+    id: 'choose'
+  });
+  chrome.contextMenus.create({
+    title: 'Caesar',
+    contexts: ['selection'], // Add 'selection' context here
+    parentId: parent,
+    id: 'caesar'
+  });
+  chrome.contextMenus.create({
+    title: 'Atbash',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'atbash'
+  });
+  chrome.contextMenus.create({
+    title: 'Vigenere',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'vigenere'
+  });
+  chrome.contextMenus.create({
+    title: 'Rail Fence',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'railfence'
+  });
+
+  // // Create a checkbox item.
+  // chrome.contextMenus.create({
+  //   title: 'checkbox',
+  //   type: 'checkbox',
+  //   id: 'checkbox'
+  // });
+  
+  // A generic onclick callback function.
+  chrome.contextMenus.onClicked.addListener(genericOnClick);
+});
 
 // A generic onclick callback function.
 function genericOnClick(info) {
@@ -67,60 +124,3 @@ function genericOnClick(info) {
 
 
 
-chrome.runtime.onInstalled.addListener(function () {
-  // Create one test item for each context type.
-  let contexts = [
-    'page',
-    'selection',
-    'link',
-    'editable',
-    'image',
-    'video',
-    'audio'
-  ];
-
-  chrome.contextMenus.create({
-    title: 'Super Decrypt',
-    contexts: ['selection'],
-    id: 'decrypt'
-  });
-
-  // Create a parent item and two children.
-  let parent = chrome.contextMenus.create({
-    title: 'Choose a Cipher',
-    contexts: ['selection'], // Add 'selection' context here
-    id: 'choose'
-  });
-  chrome.contextMenus.create({
-    title: 'Caesar',
-    contexts: ['selection'], // Add 'selection' context here
-    parentId: parent,
-    id: 'caesar'
-  });
-  chrome.contextMenus.create({
-    title: 'Atbash',
-    parentId: parent,
-    contexts: ['selection'],
-    id: 'atbash'
-  });
-  chrome.contextMenus.create({
-    title: 'Vigenere',
-    parentId: parent,
-    contexts: ['selection'],
-    id: 'vigenere'
-  });
-  chrome.contextMenus.create({
-    title: 'Rail Fence',
-    parentId: parent,
-    contexts: ['selection'],
-    id: 'railfence'
-  });
-
-  // // Create a checkbox item.
-  // chrome.contextMenus.create({
-  //   title: 'checkbox',
-  //   type: 'checkbox',
-  //   id: 'checkbox'
-  // });
-
-});
