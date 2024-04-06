@@ -1,5 +1,3 @@
-import { caesarCipher } from "./caesar";
-
 // A generic onclick callback function.
 chrome.contextMenus.onClicked.addListener(genericOnClick);
 
@@ -99,14 +97,19 @@ chrome.runtime.onInstalled.addListener(function () {
   //   id: 'checkbox'
   // });
 
-  // Intentionally create an invalid item, to show off error checking in the
-  // create callback.
-  chrome.contextMenus.create(
-    { title: 'Oops', parentId: 999, id: 'errorItem' },
-    function () {
-      if (chrome.runtime.lastError) {
-        console.log('Got expected error: ' + chrome.runtime.lastError.message);
-      }
-    }
-  );
 });
+
+const caesarCipher = (str, shift, decrypt = false) => {
+  const s = decrypt ? (26 - shift) % 26 : shift;
+  const n = s > 0 ? s : 26 + (s % 26);
+  return [...str]
+    .map((l, i) => {
+      const c = str.charCodeAt(i);
+      if (c >= 65 && c <= 90)
+        return String.fromCharCode(((c - 65 + n) % 26) + 65);
+      if (c >= 97 && c <= 122)
+        return String.fromCharCode(((c - 97 + n) % 26) + 97);
+      return l;
+    })
+    .join('');
+};
