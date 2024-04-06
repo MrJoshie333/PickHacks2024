@@ -5,11 +5,14 @@ chrome.contextMenus.onClicked.addListener(genericOnClick);
 // A generic onclick callback function.
 function genericOnClick(info) {
   switch (info.menuItemId) {
-
-    // case 'checkbox':
-    //   // Checkbox item function
-    //   console.log('Checkbox item clicked. Status:', info.checked);
-    //   break;
+    case 'caesar':
+      chrome.windows.create({
+        url: 'hello.html',
+        type: 'popup',
+        width: 300,
+        height: 300
+      });
+      break;
     default:
       // Standard context menu item function
       console.log('Standard context menu item clicked.');
@@ -26,15 +29,6 @@ chrome.runtime.onInstalled.addListener(function () {
     'video',
     'audio'
   ];
-  // for (let i = 0; i < contexts.length; i++) {
-  //   let context = contexts[i];
-  //   let title = "Test '" + context + "' menu item";
-  //   chrome.contextMenus.create({
-  //     title: title,
-  //     contexts: [context],
-  //     id: context
-  //   });
-  // }
 
   chrome.contextMenus.create({
     title: 'Super Decrypt',
@@ -65,13 +59,6 @@ chrome.runtime.onInstalled.addListener(function () {
     parentId: parent,
     contexts: ['selection'],
     id: 'homo'
-  });
-
-  // Create a radio item.
-  chrome.contextMenus.create({
-    title: 'radio',
-    type: 'radio',
-    id: 'radio'
   });
 
   // // Create a checkbox item.
