@@ -12,4 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
       var decryptedText = data.decryptedText;
       document.getElementById("decryptedText").textContent = 'Decrypted text: ' + decryptedText;
     });
+    
+    if (window.location.href.includes("caesar_popup")) {
+      // ONLY FOR CAESAR_POPUP!
+      var userInput = document.getElementById('userInput');
+      // Add event listener for 'input' event
+      userInput.addEventListener('input', function(event) {
+          // Call your function here
+          document.getElementById("decryptedText").textContent = 'TEST'
+      });
+    }
 });
