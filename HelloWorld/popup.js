@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
           // Add event listener for 'input' event
           userInput.addEventListener('input', function(event) {
               var text = document.getElementById("selectedText").textContent;
-              document.getElementById("decryptedText").textContent = caesarCipher(text.slice(15), userInput.value);
+              document.getElementById("decryptedText").textContent = "Decrypted Text: " + caesarCipher(text.slice(15), userInput.value);
           });
       }
 
