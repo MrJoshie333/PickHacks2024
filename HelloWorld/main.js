@@ -17,7 +17,7 @@ function genericOnClick(info) {
       });
       decryptedText = caesarCipher(selectedText, 4)
       break;
-    case 'mono':
+    case 'vigenere':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
@@ -25,7 +25,7 @@ function genericOnClick(info) {
         height: 200
       });
       break;
-    case 'homo':
+    case 'railfence':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
@@ -78,16 +78,16 @@ chrome.runtime.onInstalled.addListener(function () {
     id: 'caesar'
   });
   chrome.contextMenus.create({
-    title: 'Monoalphabetic',
+    title: 'Vigenere',
     parentId: parent,
     contexts: ['selection'],
-    id: 'mono'
+    id: 'vigenere'
   });
   chrome.contextMenus.create({
-    title: 'Homophonic',
+    title: 'Rail Fence',
     parentId: parent,
     contexts: ['selection'],
-    id: 'homo'
+    id: 'railfence'
   });
 
   // // Create a checkbox item.
