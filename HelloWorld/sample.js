@@ -1,3 +1,16 @@
+// Copyright 2023 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 // A generic onclick callback function.
 chrome.contextMenus.onClicked.addListener(genericOnClick);
@@ -5,6 +18,10 @@ chrome.contextMenus.onClicked.addListener(genericOnClick);
 // A generic onclick callback function.
 function genericOnClick(info) {
   switch (info.menuItemId) {
+    case 'radio':
+      // Radio item function
+      console.log('Radio item clicked. Status:', info.checked);
+      break;
     case 'checkbox':
       // Checkbox item function
       console.log('Checkbox item clicked. Status:', info.checked);
@@ -37,18 +54,23 @@ chrome.runtime.onInstalled.addListener(function () {
 
   // Create a parent item and two children.
   let parent = chrome.contextMenus.create({
-    title: 'Test parent item',
-    id: 'parent'
+    title: 'Choose a Cipher:',
+    id: 'choose'
   });
   chrome.contextMenus.create({
-    title: 'Child 1',
+    title: 'Caesar',
     parentId: parent,
-    id: 'child1'
+    id: 'caesar'
   });
   chrome.contextMenus.create({
-    title: 'You\'re Mother',
+    title: 'Monoalphabetic',
     parentId: parent,
-    id: 'child2'
+    id: 'mono'
+  });
+  chrome.contextMenus.create({
+    title: 'Homophonic',
+    parentId: parent,
+    id: 'homo'
   });
 
   // Create a radio item.
