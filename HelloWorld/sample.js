@@ -54,7 +54,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
   // Create a parent item and two children.
   let parent = chrome.contextMenus.create({
-    title: 'Choose a Cipher:',
+    title: 'Choose a Cipher',
     id: 'choose'
   });
   chrome.contextMenus.create({
