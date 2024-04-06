@@ -8,7 +8,7 @@ function genericOnClick(info) {
   let decryptedText = "You're Mother"
 
   var popupWidth = 600;
-  var popupHeight = 300;
+  var popupHeight = 400;
 
   switch (info.menuItemId) {
     case 'decrypt':
