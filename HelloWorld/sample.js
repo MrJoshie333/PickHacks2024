@@ -36,6 +36,17 @@ function genericOnClick(info) {
       console.log('Standard context menu item clicked.');
   }
 }
+
+function getSelectionText() {
+  var text = "";
+  if (window.getSelection) {
+      text = window.getSelection().toString();
+  } else if (document.selection && document.selection.type != "Control") {
+      text = document.selection.createRange().text;
+  }
+  return text;
+}
+
 chrome.runtime.onInstalled.addListener(function () {
   // Create one test item for each context type.
   let contexts = [
