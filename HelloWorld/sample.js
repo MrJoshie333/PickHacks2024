@@ -36,6 +36,12 @@ chrome.runtime.onInstalled.addListener(function () {
   //   });
   // }
 
+  chrome.contextMenus.create({
+    title: 'Super Decrypt',
+    contexts: ['selection'],
+    id: 'decrypt'
+  });
+
   // Create a parent item and two children.
   let parent = chrome.contextMenus.create({
     title: 'Choose a Cipher',
