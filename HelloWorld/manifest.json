@@ -1,6 +1,6 @@
 {
-  "name": "Hello Extensions",
-  "description": "Base Level Extension",
+  "name": "CipherSleuth",
+  "description": "A simple extension to decrypt various ciphers within the browser",
   "version": "1.0",
   "manifest_version": 3,
   
