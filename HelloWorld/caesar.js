@@ -12,8 +12,9 @@ const caesarCipher = (str, shift, decrypt = false) => {
       })
       .join('');
   };
+  export {caesarCipher};
   
-  
+
   caesarCipher('Hello World!', 23); // 'Ebiil Tloia!'
   caesarCipher('Hello World!', -3); // 'Ebiil Tloia!'
   caesarCipher('Ebiil Tloia!', 23, true); // 'Hello World!'

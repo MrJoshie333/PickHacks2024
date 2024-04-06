@@ -1,3 +1,5 @@
+import { caesarCipher } from "./caesar";
+
 // A generic onclick callback function.
 chrome.contextMenus.onClicked.addListener(genericOnClick);
 
@@ -15,6 +17,7 @@ function genericOnClick(info) {
         width: 400,
         height: 200
       });
+      decryptedText = caesarCipher(selectedText, 4)
       break;
     case 'mono':
       chrome.windows.create({
