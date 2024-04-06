@@ -5,6 +5,7 @@ chrome.contextMenus.onClicked.addListener(genericOnClick);
 function genericOnClick(info) {
 
   let selectedText = info.selectionText
+  let decryptedText = "You're Mother"
 
   switch (info.menuItemId) {
     case 'caesar':
@@ -37,6 +38,9 @@ function genericOnClick(info) {
       // Standard context menu item function
       console.log('Standard context menu item clicked.');
   }
+
+  chrome.storage.local.set({ "decryptedText": decryptedText })
+  
 }
 
 
