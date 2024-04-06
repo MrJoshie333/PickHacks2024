@@ -26,6 +26,17 @@ document.addEventListener('DOMContentLoaded', function() {
               document.getElementById("decryptedText").textContent = caesarCipher(text.slice(15), userInput.value);
           });
       }
+
+      // Check if mode is "vigenere"
+      if (mode === "vigenere") {
+        ;
+      }
+
+      // Check if mode is "railfence"
+      if (mode === "railfence") {
+        ;
+      }
+      
   });
 });
 
