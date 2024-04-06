@@ -10,7 +10,7 @@ function genericOnClick(info) {
   switch (info.menuItemId) {
     case 'caesar':
       chrome.windows.create({
-        url: 'caesar_popup.html',
+        url: 'popup.html',
         type: 'popup',
         width: 400,
         height: 200
@@ -42,7 +42,7 @@ function genericOnClick(info) {
 
   chrome.storage.local.set({ "selectedText": selectedText })
   chrome.storage.local.set({ "decryptedText": decryptedText })
-  
+  chrome.storage.local.set({"mode": info.menuItemId})
 }
 
 
@@ -99,7 +99,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
 });
 
-const caesarCipher = (str, shift, decrypt = false) => {
+function caesarCipher(str, shift, decrypt = false) {
   const s = decrypt ? (26 - shift) % 26 : shift;
   const n = s > 0 ? s : 26 + (s % 26);
   return [...str]
@@ -113,3 +113,4 @@ const caesarCipher = (str, shift, decrypt = false) => {
     })
     .join('');
 };
+  

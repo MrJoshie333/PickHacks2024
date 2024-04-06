@@ -3,12 +3,20 @@
 <head>
   <title>CipherSleuth</title>
   <script src="caesar.js" type="module"></script>
-  <script src="popup.js"></script>
   <script src="main.js"></script>
+  <script src="popup.js"></script>
+
+<style>
+  #userInput {
+    display: none;
+  }
+
+</style>
 
 </head>
 <body>
   <h2 id="selectedText"></h2>
+  <input type="text" id="userInput" placeholder="Enter an integer shift">
   Result from the Cipher
   <!-- <input type="text" id="userInput" placeholder="Enter your text here"> -->
   <!-- <button onclick="handleUserInput()">Submit</button> -->

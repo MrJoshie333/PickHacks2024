@@ -1,5 +1,4 @@
 
-
 document.addEventListener('DOMContentLoaded', function() {
     // Retrieve selected text from local storage
     chrome.storage.local.get("selectedText", function(data) {
@@ -13,13 +12,19 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("decryptedText").textContent = 'Decrypted text: ' + decryptedText;
     });
     
-    if (window.location.href.includes("caesar_popup")) {
-      // ONLY FOR CAESAR_POPUP!
-      var userInput = document.getElementById('userInput');
-      // Add event listener for 'input' event
-      userInput.addEventListener('input', function(event) {
-          // Call your function here
-          document.getElementById("decryptedText").textContent = 'TEST'
-      });
-    }
+    chrome.storage.local.get("mode", function(data) {
+      var mode = data.mode;
+
+      // Check if mode is "caesar"
+      if (mode === "caesar") {
+          var userInput = document.getElementById('userInput');
+          // Show the input element
+          userInput.style.display = 'block';
+          // Add event listener for 'input' event
+          userInput.addEventListener('input', function(event) {
+              var text = document.getElementById("decryptedText").textContent;
+              document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+          });
+      }
+  });
 });
