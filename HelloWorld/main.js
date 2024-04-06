@@ -99,6 +99,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
 });
 
+
 function caesarCipher(str, shift, decrypt = false) {
   const s = decrypt ? (26 - shift) % 26 : shift;
   const n = s > 0 ? s : 26 + (s % 26);

@@ -22,9 +22,24 @@ document.addEventListener('DOMContentLoaded', function() {
           userInput.style.display = 'block';
           // Add event listener for 'input' event
           userInput.addEventListener('input', function(event) {
-              var text = document.getElementById("decryptedText").textContent;
-              document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+              var text = document.getElementById("selectedText").textContent;
+              document.getElementById("decryptedText").textContent = caesarCipher(text.slice(15), userInput.value);
           });
       }
   });
 });
+
+function caesarCipher(str, shift, decrypt = false) {
+  const s = decrypt ? (26 - shift) % 26 : shift;
+  const n = s > 0 ? s : 26 + (s % 26);
+  return [...str]
+    .map((l, i) => {
+      const c = str.charCodeAt(i);
+      if (c >= 65 && c <= 90)
+        return String.fromCharCode(((c - 65 + n) % 26) + 65);
+      if (c >= 97 && c <= 122)
+        return String.fromCharCode(((c - 97 + n) % 26) + 97);
+      return l;
+    })
+    .join('');
+};
