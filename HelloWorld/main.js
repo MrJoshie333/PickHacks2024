@@ -7,13 +7,16 @@ function genericOnClick(info) {
   let selectedText = info.selectionText
   let decryptedText = "You're Mother"
 
+  var popupWidth = 600;
+  var popupHeight = 300;
+
   switch (info.menuItemId) {
     case 'decrypt':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 600,
-        height: 300
+        width: popupWidth,
+        height: popupHeight
       });
       break;
     
@@ -21,8 +24,8 @@ function genericOnClick(info) {
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 600,
-        height: 300
+        width: popupWidth,
+        height: popupHeight
       });
       decryptedText = "Enter a shift value"
       break;
@@ -30,16 +33,16 @@ function genericOnClick(info) {
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 600,
-        height: 300
+        width: popupWidth,
+        height: popupHeight
       });
       break;
     case 'railfence':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
-        width: 600,
-        height: 300
+        width: popupWidth,
+        height: popupHeight
       });
       break;
     
