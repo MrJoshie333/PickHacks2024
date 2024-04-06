@@ -5,14 +5,11 @@ chrome.contextMenus.onClicked.addListener(genericOnClick);
 // A generic onclick callback function.
 function genericOnClick(info) {
   switch (info.menuItemId) {
-    case 'radio':
-      // Radio item function
-      console.log('Radio item clicked. Status:', info.checked);
-      break;
-    case 'checkbox':
-      // Checkbox item function
-      console.log('Checkbox item clicked. Status:', info.checked);
-      break;
+
+    // case 'checkbox':
+    //   // Checkbox item function
+    //   console.log('Checkbox item clicked. Status:', info.checked);
+    //   break;
     default:
       // Standard context menu item function
       console.log('Standard context menu item clicked.');
@@ -29,15 +26,15 @@ chrome.runtime.onInstalled.addListener(function () {
     'video',
     'audio'
   ];
-  for (let i = 0; i < contexts.length; i++) {
-    let context = contexts[i];
-    let title = "Test '" + context + "' menu item";
-    chrome.contextMenus.create({
-      title: title,
-      contexts: [context],
-      id: context
-    });
-  }
+  // for (let i = 0; i < contexts.length; i++) {
+  //   let context = contexts[i];
+  //   let title = "Test '" + context + "' menu item";
+  //   chrome.contextMenus.create({
+  //     title: title,
+  //     contexts: [context],
+  //     id: context
+  //   });
+  // }
 
   // Create a parent item and two children.
   let parent = chrome.contextMenus.create({
@@ -71,12 +68,12 @@ chrome.runtime.onInstalled.addListener(function () {
     id: 'radio'
   });
 
-  // Create a checkbox item.
-  chrome.contextMenus.create({
-    title: 'checkbox',
-    type: 'checkbox',
-    id: 'checkbox'
-  });
+  // // Create a checkbox item.
+  // chrome.contextMenus.create({
+  //   title: 'checkbox',
+  //   type: 'checkbox',
+  //   id: 'checkbox'
+  // });
 
   // Intentionally create an invalid item, to show off error checking in the
   // create callback.
