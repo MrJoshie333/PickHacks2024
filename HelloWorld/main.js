@@ -28,18 +28,18 @@ function genericOnClick(info) {
       break;
     case 'mono':
       chrome.windows.create({
-        url: 'hello.html',
+        url: 'popup.html?text=' + encodeURIComponent(selectedText),
         type: 'popup',
-        width: 300,
-        height: 300
+        width: 400,
+        height: 200
       });
       break;
     case 'homo':
       chrome.windows.create({
-        url: 'hello.html',
+        url: 'popup.html?text=' + encodeURIComponent(selectedText),
         type: 'popup',
-        width: 300,
-        height: 300
+        width: 400,
+        height: 200
       });
       break;
     
