@@ -10,7 +10,7 @@ function genericOnClick(info) {
   switch (info.menuItemId) {
     case 'caesar':
       chrome.windows.create({
-        url: 'popup.html',
+        url: 'caesar_popup.html',
         type: 'popup',
         width: 400,
         height: 200
