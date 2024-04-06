@@ -3,17 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Retrieve selected text from local storage
     chrome.storage.local.get("selectedText", function(data) {
       var selectedText = data.selectedText;
-      document.getElementById("selectedText").textContent = 'Selected text: ' + selectedText;
+      document.getElementById("selectedText").textContent = selectedText;
     });
   
     // Retrieve decrypted result text from local storage
     chrome.storage.local.get("decryptedText", function(data) {
       var decryptedText = data.decryptedText;
-      document.getElementById("decryptedText").textContent = 'Decrypted text: ' + decryptedText;
+      document.getElementById("decryptedText").textContent = decryptedText;
     });
 
-    var text = document.getElementById("score").textContent;
-    document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text.slice(14));
+    var text = document.getElementById("decryptedText").textContent;
+    document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
     
     chrome.storage.local.get("mode", function(data) {
       var mode = data.mode;
@@ -26,12 +26,16 @@ document.addEventListener('DOMContentLoaded', function() {
           // Add event listener for 'input' event
           userInput.addEventListener('input', function(event) {
               var text = document.getElementById("selectedText").textContent;
-              document.getElementById("decryptedText").textContent = "Decrypted Text: " + caesarCipher(text.slice(15), userInput.value);
+              document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+              // document.getElementById("decryptedText").textContent = findBestDecryption(text)
+
+              var decrypted = document.getElementById("decryptedText").textContent;
+              document.getElementById("score").textContent = rateSimilarityToEnglish(decrypted);
           });
-          userInput.addEventListener('input', function(event) {
-            var text = document.getElementById("score").textContent;
-            document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text.slice(14));
-        });
+      }
+      else if (mode == "decrypt") {
+        var text = document.getElementById("selectedText").textContent;
+        document.getElementById("decryptedText").textContent = findBestDecryption(text)
       }
 
       // Check if mode is "vigenere"
@@ -46,6 +50,28 @@ document.addEventListener('DOMContentLoaded', function() {
       
   });
 });
+
+function findBestDecryption(text) {
+  let bestDecryption = '';
+  let bestSimilarity = Infinity; // Initialize with maximum possible similarity score
+
+  // Iterate over all possible rotation keys (0 to 25)
+  for (let key = 0; key < 26; key++) {
+      // Decrypt the text using the current rotation key
+      const decryptedText = caesarCipher(text, key, true);
+
+      // Calculate the similarity score of the decrypted text to English
+      const similarityScore = rateSimilarityToEnglish(decryptedText);
+
+      // Update the best decryption if the current decryption has higher similarity
+      if (similarityScore < bestSimilarity) {
+          bestSimilarity = similarityScore;
+          bestDecryption = decryptedText;
+      }
+  }
+
+  return bestDecryption;
+}
 
 function caesarCipher(str, shift, decrypt = false) {
   const s = decrypt ? (26 - shift) % 26 : shift;
@@ -65,12 +91,12 @@ function caesarCipher(str, shift, decrypt = false) {
 function rateSimilarityToEnglish(text) {
   // Expected letter frequencies in English (approximate values)
   const expectedFrequencies = {
-      'a': 8.17, 'b': 1.49, 'c': 2.78, 'd': 4.25, 'e': 12.70,
-      'f': 2.23, 'g': 2.02, 'h': 6.09, 'i': 6.97, 'j': 0.15,
-      'k': 0.77, 'l': 4.03, 'm': 2.41, 'n': 6.75, 'o': 7.51,
-      'p': 1.93, 'q': 0.10, 'r': 5.99, 's': 6.33, 't': 9.06,
-      'u': 2.76, 'v': 0.98, 'w': 2.36, 'x': 0.15, 'y': 1.97, 'z': 0.07
-  };
+    'a': 8.17, 'b': 1.49, 'c': 2.78, 'd': 4.25, 'e': 12.70,
+    'f': 2.23, 'g': 2.02, 'h': 6.09, 'i': 6.97, 'j': 0.15,
+    'k': 0.77, 'l': 4.03, 'm': 2.41, 'n': 6.75, 'o': 7.51,
+    'p': 1.93, 'q': 0.10, 'r': 5.99, 's': 6.33, 't': 9.06,
+    'u': 2.76, 'v': 0.98, 'w': 2.36, 'x': 0.15, 'y': 1.97, 'z': 0.07
+};
 
   // Count the occurrences of each letter in the input text
   const frequencies = {};
@@ -83,9 +109,11 @@ function rateSimilarityToEnglish(text) {
   // Calculate the similarity score
   let score = 0;
   for (let char in frequencies) {
+    if (char in expectedFrequencies) {
       const observedFrequency = (frequencies[char] / text.length) * 100;
       const expectedFrequency = expectedFrequencies[char];
       score += Math.abs(observedFrequency - expectedFrequency);
+    }
   }
 
   return score;

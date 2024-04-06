@@ -8,6 +8,15 @@ function genericOnClick(info) {
   let decryptedText = "You're Mother"
 
   switch (info.menuItemId) {
+    case 'decrypt':
+      chrome.windows.create({
+        url: 'popup.html',
+        type: 'popup',
+        width: 600,
+        height: 300
+      });
+      break;
+    
     case 'caesar':
       chrome.windows.create({
         url: 'popup.html',
