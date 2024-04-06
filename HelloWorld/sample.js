@@ -13,6 +13,24 @@ function genericOnClick(info) {
         height: 300
       });
       break;
+    case 'mono':
+      chrome.windows.create({
+        url: 'hello.html',
+        type: 'popup',
+        width: 300,
+        height: 300
+      });
+      break;
+    case 'homo':
+      chrome.windows.create({
+        url: 'hello.html',
+        type: 'popup',
+        width: 300,
+        height: 300
+      });
+      break;
+    
+    
     default:
       // Standard context menu item function
       console.log('Standard context menu item clicked.');
