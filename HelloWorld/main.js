@@ -1,16 +1,29 @@
 
+// function getSelectionText() {
+//   var text = "";
+//   if (window.getSelection) {
+//       text = window.getSelection().toString();
+//   } else if (document.selection && document.selection.type != "Control") {
+//       text = document.selection.createRange().text;
+//   }
+//   return text;
+// }
+
 // A generic onclick callback function.
 chrome.contextMenus.onClicked.addListener(genericOnClick);
 
 // A generic onclick callback function.
 function genericOnClick(info) {
+
+  let selectedText = "You're Mother" // TODO: Figure out how to get the selected text
+
   switch (info.menuItemId) {
     case 'caesar':
       chrome.windows.create({
-        url: 'hello.html',
+        url: 'popup.html?text=' + encodeURIComponent(selectedText),
         type: 'popup',
-        width: 300,
-        height: 300
+        width: 400,
+        height: 200
       });
       break;
     case 'mono':
@@ -37,15 +50,7 @@ function genericOnClick(info) {
   }
 }
 
-function getSelectionText() {
-  var text = "";
-  if (window.getSelection) {
-      text = window.getSelection().toString();
-  } else if (document.selection && document.selection.type != "Control") {
-      text = document.selection.createRange().text;
-  }
-  return text;
-}
+
 
 chrome.runtime.onInstalled.addListener(function () {
   // Create one test item for each context type.
