@@ -15,7 +15,7 @@ function genericOnClick(info) {
         width: 600,
         height: 300
       });
-      decryptedText = caesarCipher(selectedText, 4)
+      decryptedText = "Enter a shift value"
       break;
     case 'vigenere':
       chrome.windows.create({
