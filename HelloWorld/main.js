@@ -27,7 +27,15 @@ function genericOnClick(info) {
         width: popupWidth,
         height: popupHeight
       });
-      decryptedText = "Enter a shift value"
+      decryptedText = ""
+      break;
+    case 'atbash':
+      chrome.windows.create({
+        url: 'popup.html',
+        type: 'popup',
+        width: popupWidth,
+        height: popupHeight
+      });
       break;
     case 'vigenere':
       chrome.windows.create({
@@ -90,6 +98,12 @@ chrome.runtime.onInstalled.addListener(function () {
     id: 'caesar'
   });
   chrome.contextMenus.create({
+    title: 'Atbash',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'atbash'
+  });
+  chrome.contextMenus.create({
     title: 'Vigenere',
     parentId: parent,
     contexts: ['selection'],
@@ -127,3 +141,4 @@ function caesarCipher(str, shift, decrypt = false) {
     .join('');
 };
   
+// This script uses objects to lookup various alphabets

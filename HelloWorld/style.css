@@ -63,7 +63,7 @@ p {
 
 /*user input */
 #userInput {
-    display: inline-block;
+    display: none;
     width: 150px;
     height: 20px;
     padding: 5px;

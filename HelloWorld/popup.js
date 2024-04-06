@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (mode === "caesar") {
           var userInput = document.getElementById('userInput');
           // Show the input element
-          userInput.style.display = 'block';
+          userInput.style.display = 'inline-block';
           // Add event listener for 'input' event
           userInput.addEventListener('input', function(event) {
               var text = document.getElementById("selectedText").textContent;
@@ -33,9 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
               document.getElementById("score").textContent = rateSimilarityToEnglish(decrypted);
           });
       }
+      else if (mode == "atbash") {
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = atbashCipher(text);
+      }
       else if (mode == "decrypt") {
         var text = document.getElementById("selectedText").textContent;
-        document.getElementById("decryptedText").textContent = findBestDecryption(text)
+        result = findBestDecryption(text)
+        document.getElementById("decryptedText").textContent = result[0];
+        document.getElementById('title').textContent = result[1];
       }
 
       // Check if mode is "vigenere"
@@ -54,39 +60,41 @@ document.addEventListener('DOMContentLoaded', function() {
 function findBestDecryption(text) {
   let bestDecryption = '';
   let bestSimilarity = Infinity; // Initialize with maximum possible similarity score
+  let decryptedText = '';
+  let cipher = '';
+  // ===== Caesar Cipher =====
 
   // Iterate over all possible rotation keys (0 to 25)
   for (let key = 0; key < 26; key++) {
-      // Decrypt the text using the current rotation key
-      const decryptedText = caesarCipher(text, key, true);
+    // Decrypt the text using the current rotation key
+    decryptedText = caesarCipher(text, key, true);
 
-      // Calculate the similarity score of the decrypted text to English
-      const similarityScore = rateSimilarityToEnglish(decryptedText);
+    // Calculate the similarity score of the decrypted text to English
+    const similarityScore = rateSimilarityToEnglish(decryptedText);
 
-      // Update the best decryption if the current decryption has higher similarity
-      if (similarityScore < bestSimilarity) {
-          bestSimilarity = similarityScore;
-          bestDecryption = decryptedText;
-      }
+    // Update the best decryption if the current decryption has higher similarity
+    if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Caesar Cipher";
+    }
   }
 
-  return bestDecryption;
-}
+  // ===== Atbash Cipher =====
 
-function caesarCipher(str, shift, decrypt = false) {
-  const s = decrypt ? (26 - shift) % 26 : shift;
-  const n = s > 0 ? s : 26 + (s % 26);
-  return [...str]
-    .map((l, i) => {
-      const c = str.charCodeAt(i);
-      if (c >= 65 && c <= 90)
-        return String.fromCharCode(((c - 65 + n) % 26) + 65);
-      if (c >= 97 && c <= 122)
-        return String.fromCharCode(((c - 97 + n) % 26) + 97);
-      return l;
-    })
-    .join('');
-};
+  decryptedText = atbashCipher(text);
+  // Calculate the similarity score of the decrypted text to English
+  const similarityScore = rateSimilarityToEnglish(decryptedText);
+
+  // Update the best decryption if the current decryption has higher similarity
+  if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Atbash Cipher";
+  }
+
+  return [bestDecryption, cipher];
+}
 
 function rateSimilarityToEnglish(text) {
   // Expected letter frequencies in English (approximate values)
@@ -96,7 +104,7 @@ function rateSimilarityToEnglish(text) {
     'k': 0.77, 'l': 4.03, 'm': 2.41, 'n': 6.75, 'o': 7.51,
     'p': 1.93, 'q': 0.10, 'r': 5.99, 's': 6.33, 't': 9.06,
     'u': 2.76, 'v': 0.98, 'w': 2.36, 'x': 0.15, 'y': 1.97, 'z': 0.07
-};
+  };
 
   // Count the occurrences of each letter in the input text
   const frequencies = {};
@@ -117,4 +125,48 @@ function rateSimilarityToEnglish(text) {
   }
 
   return score;
+}
+
+function caesarCipher(str, shift, decrypt = false) {
+  const s = decrypt ? (26 - shift) % 26 : shift;
+  const n = s > 0 ? s : 26 + (s % 26);
+  return [...str]
+    .map((l, i) => {
+      const c = str.charCodeAt(i);
+      if (c >= 65 && c <= 90)
+        return String.fromCharCode(((c - 65 + n) % 26) + 65);
+      if (c >= 97 && c <= 122)
+        return String.fromCharCode(((c - 97 + n) % 26) + 97);
+      return l;
+    })
+    .join('');
+};
+
+function atbashCipher(text) {
+  let lookup_table = {
+    'A': 'Z', 'B': 'Y', 'C': 'X', 'D': 'W', 'E': 'V',
+    'F': 'U', 'G': 'T', 'H': 'S', 'I': 'R', 'J': 'Q',
+    'K': 'P', 'L': 'O', 'M': 'N', 'N': 'M', 'O': 'L',
+    'P': 'K', 'Q': 'J', 'R': 'I', 'S': 'H', 'T': 'G',
+    'U': 'F', 'V': 'E', 'W': 'D', 'X': 'C', 'Y': 'B', 'Z': 'A'
+  };
+  let cipher = '';
+  for (let letter of text) {
+    // checks for space
+    if (letter.toUpperCase() in lookup_table) {
+      match = lookup_table[letter.toUpperCase()];
+      // adds the corresponding letter from the lookup_table
+      if (letter.toUpperCase() !== letter) {
+        cipher += match.toLowerCase();
+      }
+      else {
+        cipher += match;
+      }
+      
+    } else {
+        // adds space
+        cipher += letter;
+    }
+  }
+  return cipher;
 }
