@@ -12,7 +12,7 @@ function genericOnClick(info) {
   switch (info.menuItemId) {
     case 'caesar':
       chrome.windows.create({
-        url: 'popup.html?text=' + encodeURIComponent(selectedText),
+        url: 'popup.html',
         type: 'popup',
         width: 400,
         height: 200
@@ -21,7 +21,7 @@ function genericOnClick(info) {
       break;
     case 'mono':
       chrome.windows.create({
-        url: 'popup.html?text=' + encodeURIComponent(selectedText),
+        url: 'popup.html',
         type: 'popup',
         width: 400,
         height: 200
@@ -29,7 +29,7 @@ function genericOnClick(info) {
       break;
     case 'homo':
       chrome.windows.create({
-        url: 'popup.html?text=' + encodeURIComponent(selectedText),
+        url: 'popup.html',
         type: 'popup',
         width: 400,
         height: 200
@@ -42,6 +42,7 @@ function genericOnClick(info) {
       console.log('Standard context menu item clicked.');
   }
 
+  chrome.storage.local.set({ "selectedText": selectedText })
   chrome.storage.local.set({ "decryptedText": decryptedText })
   
 }
