@@ -41,18 +41,23 @@ chrome.runtime.onInstalled.addListener(function () {
 
   // Create a parent item and two children.
   let parent = chrome.contextMenus.create({
-    title: 'Test parent item',
-    id: 'parent'
+    title: 'Choose a Cipher',
+    id: 'choose'
   });
   chrome.contextMenus.create({
-    title: 'Child 1',
+    title: 'Caesar',
     parentId: parent,
-    id: 'child1'
+    id: 'caesar'
   });
   chrome.contextMenus.create({
-    title: 'Child 2',
+    title: 'Monoalphabetic',
     parentId: parent,
-    id: 'child2'
+    id: 'mono'
+  });
+  chrome.contextMenus.create({
+    title: 'Homophonic Substitution',
+    parentId: parent,
+    id: 'homo'
   });
 
   // Create a radio item.
