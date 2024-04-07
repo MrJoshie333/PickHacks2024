@@ -21,18 +21,24 @@ document.addEventListener('DOMContentLoaded', function() {
         userInput.addEventListener('input', function(event) {
             var text = document.getElementById("selectedText").textContent;
             document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+            var text = document.getElementById("decryptedText").textContent;
+            document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
         });
       }
       else if (mode == "atbash") {
         document.getElementById('title').textContent = "Atbash Cipher"
         var text = document.getElementById('selectedText').textContent;
         document.getElementById("decryptedText").textContent = atbashCipher(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
       }
       else if (mode == "decrypt") {
         var text = document.getElementById("selectedText").textContent;
         result = findBestDecryption(text)
         document.getElementById("decryptedText").textContent = result[0];
         document.getElementById('title').textContent = "Detected: " + result[1];
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(result[0]);
         
       }
       else if (mode === "railfence") {
@@ -45,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function() {
             var text = document.getElementById("selectedText").textContent;
             if (userInput.value > 1) {
               document.getElementById("decryptedText").textContent = railFenceCipher(text, userInput.value);
+              var text = document.getElementById("decryptedText").textContent;
+              document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
             }
             else {
               document.getElementById("decryptedText").textContent = "Use a key of 2 or higher...";
@@ -54,8 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (mode === "vigenere") {
         ;
       }
-      var text = document.getElementById("decryptedText").textContent;
-      document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
     });
 });
 
