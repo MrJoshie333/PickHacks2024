@@ -93,7 +93,14 @@ function genericOnClick(info) {
         });
         break;
       
-      case 'caesar', 'atbash', 'affine', 'railfence', 'base64', 'binary', 'hex', 'morse':
+      case 'caesar':
+      case 'atbash':
+      case 'affine':
+      case 'railfence':
+      case 'base64':
+      case 'binary':
+      case 'hex':
+      case 'morse':
         chrome.windows.create({
           url: 'popup.html',
           type: 'popup',
@@ -101,10 +108,10 @@ function genericOnClick(info) {
           height: popupHeight
         });
         break;
-      
+
       default:
-        // Standard context menu item function
-        console.log('Standard context menu item clicked.');
+        break;
+      
     }
 
     chrome.storage.local.set({ "selectedText": selectedText })
