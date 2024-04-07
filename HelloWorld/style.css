@@ -5,7 +5,7 @@ body {
     color: #f0f0f0; /* White or light color for text */
     font-family: Arial, sans-serif; /* Set desired font family */
     padding: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
 /* Style specific elements within the content */
