@@ -1,6 +1,4 @@
 # PickHacks2024
-PickHAcks2024
-
 ## Examples of Ciphertext(s):
 
 **Caesar Cipher:** Vsfs ofs gcas zcjszm kcfrg tcf mci hc fsor!
