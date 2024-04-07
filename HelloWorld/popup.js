@@ -106,6 +106,13 @@ document.addEventListener('DOMContentLoaded', function() {
           
       });
       }
+      else if (mode == "base64") {
+        document.getElementById('title').textContent = "Base64 Conversion"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = atob(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+      }
 
     });
   }
@@ -184,6 +191,15 @@ function findBestDecryption(text) {
     }
   }
   
+  // ===== Base64 =====
+  decryptedText = atob(text);
+  similarityScore = rateSimilarityToEnglish(decryptedText);
+  if (similarityScore < bestSimilarity) {
+    bestSimilarity = similarityScore;
+    bestDecryption = decryptedText;
+    cipher = "Base64 Encoding";
+  }
+
   return [bestDecryption, cipher];
 }
 

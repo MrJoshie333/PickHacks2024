@@ -46,6 +46,12 @@ chrome.runtime.onInstalled.addListener(function () {
     contexts: ['selection'],
     id: 'railfence'
   });
+  chrome.contextMenus.create({
+    title: 'Base64',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'base64'
+  });
   
   // A generic onclick callback function.
   chrome.contextMenus.onClicked.addListener(genericOnClick);
@@ -94,6 +100,14 @@ function genericOnClick(info) {
         });
         break;
       case 'railfence':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      case 'base64':
         chrome.windows.create({
           url: 'popup.html',
           type: 'popup',
