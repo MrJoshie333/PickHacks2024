@@ -62,7 +62,7 @@ p {
 }
 
 /*user input */
-#userInput {
+#userInput, #userInput2 {
     display: none;
     width: 150px;
     height: 20px;
@@ -75,7 +75,7 @@ p {
     font-family: "Chakra Petch", sans-serif;
 }
 
-#userInput:focus {
+#userInput:focus, #userInput2:focus {
     border-color: rgb(102, 0, 8); /* Change border color on focus */
     box-shadow: 0 0 5px rgba(37, 2, 2, 0.5); /* Add a subtle shadow on focus */
 }

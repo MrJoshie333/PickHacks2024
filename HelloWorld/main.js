@@ -35,10 +35,10 @@ chrome.runtime.onInstalled.addListener(function () {
     id: 'atbash'
   });
   chrome.contextMenus.create({
-    title: 'Vigenere',
+    title: 'Affine',
     parentId: parent,
     contexts: ['selection'],
-    id: 'vigenere'
+    id: 'affine'
   });
   chrome.contextMenus.create({
     title: 'Rail Fence',
@@ -85,7 +85,7 @@ function genericOnClick(info) {
         height: popupHeight
       });
       break;
-    case 'vigenere':
+    case 'affine':
       chrome.windows.create({
         url: 'popup.html',
         type: 'popup',
