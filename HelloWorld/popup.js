@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var userInput = document.getElementById('userInput');
         // Show the input element
         userInput.style.display = 'inline-block';
+        userInput.placeholder = 'Enter # of rails';
         // Add event listener for 'input' event
         userInput.addEventListener('input', function(event) {
             var text = document.getElementById("selectedText").textContent;
@@ -62,8 +63,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
       }
-      else if (mode === "vigenere") {
-        ;
+      else if (mode === "affine") {
+        document.getElementById('title').textContent = "Affine Cipher"
+        var userInput = document.getElementById('userInput');
+        userInput.style.display = 'inline-block';
+        userInput.placeholder = "Enter Coefficient 1"
+        var userInput2 = document.getElementById('userInput2');
+        userInput2.style.display = 'inline-block';
+        userInput2.placeholder = "Enter Coefficient 2"
+
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = affineCipher(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+
+        userInput.addEventListener('input', function(event) {
+          var text = document.getElementById("selectedText").textContent;
+          if (userInput.value !== "" && userInput2.value !== "") {
+            document.getElementById("decryptedText").textContent = affineCipher(text, userInput.value, userInput2.value);
+            var text = document.getElementById("decryptedText").textContent;
+            document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+          }
+          else {
+            document.getElementById("decryptedText").textContent = "Enter your two coefficients...";
+          }
+      });
+
+      userInput2.addEventListener('input', function(event) {
+        var text = document.getElementById("selectedText").textContent;
+          if (userInput.value !== "" && userInput2.value !== "") {
+            document.getElementById("decryptedText").textContent = affineCipher(text, userInput.value, userInput2.value);
+            var text = document.getElementById("decryptedText").textContent;
+            document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+          }
+          else {
+            document.getElementById("decryptedText").textContent = "Enter your two coefficients...";
+          }
+    });
       }
     });
 });
@@ -127,6 +163,19 @@ function findBestDecryption(text) {
     }
   }
 
+  // ===== Affine Cipher =====
+  for (let a = 1; a < 26; a++) {
+    for (let b = 0; b < 26; b++) {
+      decryptedText = affineCipher(text, a, b);
+      similarityScore = rateSimilarityToEnglish(decryptedText);
+      if (similarityScore < bestSimilarity) {
+        bestSimilarity = similarityScore;
+        bestDecryption = decryptedText;
+        cipher = "Affine Cipher (a=" + a + ", b=" + b + ")";
+      }
+    }
+  }
+  
   return [bestDecryption, cipher];
 }
 
@@ -282,4 +331,38 @@ function railFenceCipher(text, n) {
   return text.split('').reduce(function(p,c,i,a){ return p + a[mapped.indexOf(i)]},'');
   for( i = 0; i < len; i++) result += text.substr( mapped.indexOf( i), 1);
   return result;  
+}
+
+function modInverse(a, m) {
+  // Extended Euclidean Algorithm
+  let [m0, x0, x1] = [m, 0, 1];
+  while (a > 1) {
+      let q = Math.floor(a / m);
+      [m, a] = [a % m, m];
+      [x0, x1] = [x1 - q * x0, x0];
+  }
+  return x1 < 0 ? x1 + m0 : x1;
+}
+
+function affineCipher(ciphertext, a, b) {
+  const m = 26; // Size of the English alphabet
+  const aInv = modInverse(a, m);
+  let plaintext = '';
+  for (let i = 0; i < ciphertext.length; i++) {
+      const charCode = ciphertext.charCodeAt(i);
+      if (charCode >= 65 && charCode <= 90) { // Uppercase letters
+          const x = charCode - 65;
+          const decryptedValue = (aInv * (x - b)) % m;
+          const decryptedCharCode = decryptedValue < 0 ? decryptedValue + m : decryptedValue;
+          plaintext += String.fromCharCode(decryptedCharCode + 65);
+      } else if (charCode >= 97 && charCode <= 122) { // Lowercase letters
+          const x = charCode - 97;
+          const decryptedValue = (aInv * (x - b)) % m;
+          const decryptedCharCode = decryptedValue < 0 ? decryptedValue + m : decryptedValue;
+          plaintext += String.fromCharCode(decryptedCharCode + 97);
+      } else {
+          plaintext += ciphertext[i]; // Non-alphabetic characters remain unchanged
+      }
+  }
+  return plaintext;
 }
