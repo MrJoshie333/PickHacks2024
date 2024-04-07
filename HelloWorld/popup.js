@@ -120,6 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var text = document.getElementById("decryptedText").textContent;
         document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
       }
+      else if (mode == "hex") {
+        document.getElementById('title').textContent = "Hexadecimal Conversion"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = hexDecode(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+      }
 
     });
   }
@@ -219,6 +226,15 @@ function findBestDecryption(text) {
     bestSimilarity = similarityScore;
     bestDecryption = decryptedText;
     cipher = "Binary Encoding";
+  }
+
+  // ===== Hexadecimal =====
+  decryptedText = hexDecode(text);
+  similarityScore = rateSimilarityToEnglish(decryptedText);
+  if (similarityScore < bestSimilarity) {
+    bestSimilarity = similarityScore;
+    bestDecryption = decryptedText;
+    cipher = "Hexadecimal Encoding";
   }
 
   return [bestDecryption, cipher];
@@ -421,4 +437,22 @@ function binaryDecode(str) {
       binCode.push(String.fromCharCode(parseInt(newBin[i], 2)));
     }
   return binCode.join("");
+}
+
+function hexDecode(hex) {
+  // initialize the ASCII code string as empty.
+  var ascii = "";
+
+  for (var i = 0; i < hex.length; i += 2) {
+    // extract two characters from hex string
+    var part = hex.substring(i, i + 2);
+
+    // change it into base 16 and
+    // typecast as the character
+    var ch = String.fromCharCode(parseInt(part, 16));
+
+    // add this char to final ASCII string
+    ascii += ch;
   }
+  return ascii;
+}

@@ -58,6 +58,12 @@ chrome.runtime.onInstalled.addListener(function () {
     contexts: ['selection'],
     id: 'binary'
   });
+  chrome.contextMenus.create({
+    title: 'Hexadecimal',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'hex'
+  });
   
   // A generic onclick callback function.
   chrome.contextMenus.onClicked.addListener(genericOnClick);
@@ -81,7 +87,7 @@ function genericOnClick(info) {
         });
         break;
       
-      case 'caesar':
+      case 'caesar', 'atbash', 'affine', 'railfence', 'base64', 'binary', 'hex':
         chrome.windows.create({
           url: 'popup.html',
           type: 'popup',
@@ -89,32 +95,6 @@ function genericOnClick(info) {
           height: popupHeight
         });
         break;
-      case 'atbash':
-        chrome.windows.create({
-          url: 'popup.html',
-          type: 'popup',
-          width: popupWidth,
-          height: popupHeight
-        });
-        break;
-      case 'affine':
-        chrome.windows.create({
-          url: 'popup.html',
-          type: 'popup',
-          width: popupWidth,
-          height: popupHeight
-        });
-        break;
-      case 'railfence', 'base64', 'binary':
-        chrome.windows.create({
-          url: 'popup.html',
-          type: 'popup',
-          width: popupWidth,
-          height: popupHeight
-        });
-        break;
-      
-      
       
       default:
         // Standard context menu item function
