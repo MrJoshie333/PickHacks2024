@@ -219,33 +219,38 @@ function findBestDecryption(text) {
   
   // ===== Base64 =====
   try {
-  decryptedText = atob(text);
+    decryptedText = atob(text);
+    similarityScore = rateSimilarityToEnglish(decryptedText);
+    if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Base64 Encoding";
+    }
   } catch (error) {
-
+    
   }
-  similarityScore = rateSimilarityToEnglish(decryptedText);
-  if (similarityScore < bestSimilarity) {
-    bestSimilarity = similarityScore;
-    bestDecryption = decryptedText;
-    cipher = "Base64 Encoding";
-  }
+  
 
   // ===== Binary =====
-  decryptedText = binaryDecode(text);
-  similarityScore = rateSimilarityToEnglish(decryptedText);
-  if (similarityScore < bestSimilarity) {
-    bestSimilarity = similarityScore;
-    bestDecryption = decryptedText;
-    cipher = "Binary Encoding";
+  if (/^[01\s]+$/.test(text)) {
+    decryptedText = binaryDecode(text);
+    similarityScore = rateSimilarityToEnglish(decryptedText) - 100;
+    if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Binary Encoding";
+    }
   }
 
   // ===== Hexadecimal =====
-  decryptedText = hexDecode(text);
-  similarityScore = rateSimilarityToEnglish(decryptedText);
-  if (similarityScore < bestSimilarity) {
-    bestSimilarity = similarityScore;
-    bestDecryption = decryptedText;
-    cipher = "Hexadecimal Encoding";
+  if (/^[0-9A-Fa-f\s]+$/.test(text)) {    
+    decryptedText = hexDecode(text);
+    similarityScore = rateSimilarityToEnglish(decryptedText);
+    if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Hexadecimal Encoding";
+    }
   }
 
   // ===== Morse Code =====
@@ -257,30 +262,26 @@ function findBestDecryption(text) {
     return [decryptedText, "Morse Code"];
   }
 
-  if (similarityScore < bestSimilarity) {
-    bestSimilarity = similarityScore;
-    bestDecryption = decryptedText;
-    cipher = "Morse Code";
-  }
-
   return [bestDecryption, cipher];
 }
 
 function rateSimilarityToEnglish(text) {
   // Expected letter frequencies in English (approximate values)
   const expectedFrequencies = {
-      'a': 8.17, 'b': 1.49, 'c': 2.78, 'd': 4.25, 'e': 12.70,
-      'f': 2.23, 'g': 2.02, 'h': 6.09, 'i': 6.97, 'j': 0.15,
-      'k': 0.77, 'l': 4.03, 'm': 2.41, 'n': 6.75, 'o': 7.51,
-      'p': 1.93, 'q': 0.10, 'r': 5.99, 's': 6.33, 't': 9.06,
-      'u': 2.76, 'v': 0.98, 'w': 2.36, 'x': 0.15, 'y': 1.97, 'z': 0.07
+    'a': 8.17, 'b': 1.49, 'c': 2.78, 'd': 4.25, 'e': 12.70,
+    'f': 2.23, 'g': 2.02, 'h': 6.09, 'i': 6.97, 'j': 0.15,
+    'k': 0.77, 'l': 4.03, 'm': 2.41, 'n': 6.75, 'o': 7.51,
+    'p': 1.93, 'q': 0.10, 'r': 5.99, 's': 6.33, 't': 9.06,
+    'u': 2.76, 'v': 0.98, 'w': 2.36, 'x': 0.15, 'y': 1.97, 'z': 0.07,
+    '0': 0.01, '1': 0.01, '2': 0.01, '3': 0.01, '4': 0.01,
+    '5': 0.01, '6': 0.01, '7': 0.01, '8': 0.01, '9': 0.01
   };
 
   // List of common English words
   const commonWords = [
-      "able", "about", "above", "across", "add", "after", "again", "against", "ago", "air", "all", "almost", "alone", 
+      " a ", "able", "about", "above", "across", "add", "after", "again", "against", "ago", "air", "all", "almost", "alone", 
       "along", "already", "also", "although", "always", "am", "American", "among", "an", "and", "animal", "animals", 
-      "another", "answer", "any", "anything", "are", "area", "around", "as", "asked", "at", "away", "back", "ball", 
+      "another", "answer", "any", "anything", "are", "area", "around", "as", "asked", "at", "away", "baby", "back", "ball", 
       "be", "beautiful", "became", "because", "become", "been", "before", "began", "begin", "behind", "being", "below", 
       "bet", "better", "between", "big", "black", "blue", "boat", "body", "book", "both", "bottom", "box", "boy", "bring", 
       "brought", "build", "built", "but", "by", "called", "came", "can", "can't", "cannot", "car", "care", "carefully", "carry", 
@@ -331,17 +332,9 @@ function rateSimilarityToEnglish(text) {
       }
   }
 
-  // // Check the presence of common English words in the text
-  // const words = text.toLowerCase().split(/[^\w']+/);
-  // for (let word of words) {
-  //     if (commonWords.includes(word)) {
-  //       score -= (5 * words.filter(x => x==word).length); // Adjust the score for each common English word found
-  //     }
-  // }
-
   // Check the presence of common English words in the text
-const words = text.toLowerCase().split(/[^a-zA-Z']+|'(?![a-zA-Z])/); // Split by non-alphabetic characters but keep single quotes intact
-for (let word of words) {
+  const words = text.toLowerCase().split(/[^a-zA-Z']+|'(?![a-zA-Z])/); // Split by non-alphabetic characters but keep single quotes intact
+  for (let word of words) {
     // Include the word and its subwords (if any)
     for (let i = 1; i <= word.length; i++) {
         const subword = word.substring(0, i);
@@ -349,8 +342,10 @@ for (let word of words) {
             score -= 5;
         }
     }
-}
-
+  }
+  if (!(/^[a-zA-Z0-9\s.,!?&'"()\-\-]+$/.test(text)) || isOverHalfNumbers(text)) {
+    score += 100;
+  }
   return score;
 }
 
@@ -511,4 +506,19 @@ function morseDecode(text) {
   }
 
   return decodedText.trim(); // Remove trailing space
+}
+
+function isOverHalfNumbers(text) {
+  let countNumbers = 0;
+  let countNonNumbers = 0;
+
+  for (let char of text) {
+      if (!isNaN(parseInt(char))) {
+          countNumbers++;
+      } else if (char !== ' ') { // Exclude spaces
+          countNonNumbers++;
+      }
+  }
+
+  return countNumbers > (text.length / 2);
 }
