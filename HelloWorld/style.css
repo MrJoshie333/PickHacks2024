@@ -79,3 +79,12 @@ p {
     border-color: rgb(102, 0, 8); /* Change border color on focus */
     box-shadow: 0 0 5px rgba(37, 2, 2, 0.5); /* Add a subtle shadow on focus */
 }
+
+.custom-link {
+    color: #6ed7ff; /* Change link color to a light blue */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.custom-link:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
