@@ -52,6 +52,12 @@ chrome.runtime.onInstalled.addListener(function () {
     contexts: ['selection'],
     id: 'base64'
   });
+  chrome.contextMenus.create({
+    title: 'Binary',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'binary'
+  });
   
   // A generic onclick callback function.
   chrome.contextMenus.onClicked.addListener(genericOnClick);
@@ -99,7 +105,7 @@ function genericOnClick(info) {
           height: popupHeight
         });
         break;
-      case 'railfence':
+      case 'railfence', 'base64', 'binary':
         chrome.windows.create({
           url: 'popup.html',
           type: 'popup',
@@ -107,14 +113,7 @@ function genericOnClick(info) {
           height: popupHeight
         });
         break;
-      case 'base64':
-        chrome.windows.create({
-          url: 'popup.html',
-          type: 'popup',
-          width: popupWidth,
-          height: popupHeight
-        });
-        break;
+      
       
       
       default:

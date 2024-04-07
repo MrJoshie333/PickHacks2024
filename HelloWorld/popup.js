@@ -113,6 +113,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var text = document.getElementById("decryptedText").textContent;
         document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
       }
+      else if (mode == "binary") {
+        document.getElementById('title').textContent = "Binary Conversion"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = binaryDecode(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+      }
 
     });
   }
@@ -144,7 +151,12 @@ function findBestDecryption(text) {
       bestSimilarity = similarityScore;
       bestDecryption = decryptedText;
       originalShift = 26 - key;
-      cipher = "Caesar Cipher (" + originalShift + ")";
+      if (originalShift !== 13) {
+        cipher = "Caesar Cipher (" + originalShift + ")";
+      }
+      else {
+        cipher = "ROT-13 Cipher";
+      }
     }
   }
 
@@ -198,6 +210,15 @@ function findBestDecryption(text) {
     bestSimilarity = similarityScore;
     bestDecryption = decryptedText;
     cipher = "Base64 Encoding";
+  }
+
+  // ===== Binary =====
+  decryptedText = binaryDecode(text);
+  similarityScore = rateSimilarityToEnglish(decryptedText);
+  if (similarityScore < bestSimilarity) {
+    bestSimilarity = similarityScore;
+    bestDecryption = decryptedText;
+    cipher = "Binary Encoding";
   }
 
   return [bestDecryption, cipher];
@@ -390,3 +411,14 @@ function affineCipher(ciphertext, a, b) {
   }
   return plaintext;
 }
+
+function binaryDecode(str) {
+
+  var newBin = str.split(" ");
+  var binCode = [];
+  
+  for (i = 0; i < newBin.length; i++) {
+      binCode.push(String.fromCharCode(parseInt(newBin[i], 2)));
+    }
+  return binCode.join("");
+  }
