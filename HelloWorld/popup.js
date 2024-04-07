@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add event listener for 'input' event
         userInput.addEventListener('input', function(event) {
             var text = document.getElementById("selectedText").textContent;
-            if (userInput.value > 1 && userInput.value < userInput.length) {
+            if (userInput.value > 1 && userInput.value < text.length) {
               document.getElementById("decryptedText").textContent = railFenceCipher(text, userInput.value);
               var text = document.getElementById("decryptedText").textContent;
               document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
