@@ -64,6 +64,12 @@ chrome.runtime.onInstalled.addListener(function () {
     contexts: ['selection'],
     id: 'hex'
   });
+  chrome.contextMenus.create({
+    title: 'Morse Code',
+    parentId: parent,
+    contexts: ['selection'],
+    id: 'morse'
+  });
   
   // A generic onclick callback function.
   chrome.contextMenus.onClicked.addListener(genericOnClick);
@@ -87,7 +93,7 @@ function genericOnClick(info) {
         });
         break;
       
-      case 'caesar', 'atbash', 'affine', 'railfence', 'base64', 'binary', 'hex':
+      case 'caesar', 'atbash', 'affine', 'railfence', 'base64', 'binary', 'hex', 'morse':
         chrome.windows.create({
           url: 'popup.html',
           type: 'popup',

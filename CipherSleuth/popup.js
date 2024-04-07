@@ -127,6 +127,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var text = document.getElementById("decryptedText").textContent;
         document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
       }
+      else if (mode == "morse") {
+        document.getElementById('title').textContent = "Morse Code"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = morseDecode(text);
+        var text = document.getElementById("decryptedText").textContent;
+        document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
+      }
 
     });
   }
@@ -211,7 +218,11 @@ function findBestDecryption(text) {
   }
   
   // ===== Base64 =====
+  try {
   decryptedText = atob(text);
+  } catch (error) {
+
+  }
   similarityScore = rateSimilarityToEnglish(decryptedText);
   if (similarityScore < bestSimilarity) {
     bestSimilarity = similarityScore;
@@ -235,6 +246,15 @@ function findBestDecryption(text) {
     bestSimilarity = similarityScore;
     bestDecryption = decryptedText;
     cipher = "Hexadecimal Encoding";
+  }
+
+  // ===== Morse Code =====
+  decryptedText = morseDecode(text);
+  similarityScore = rateSimilarityToEnglish(decryptedText);
+  if (similarityScore < bestSimilarity) {
+    bestSimilarity = similarityScore;
+    bestDecryption = decryptedText;
+    cipher = "Morse Code";
   }
 
   return [bestDecryption, cipher];
@@ -454,4 +474,36 @@ function hexDecode(hex) {
     ascii += ch;
   }
   return ascii;
+}
+
+function morseDecode(text) {
+  const patternMap = {
+    ".-": "A", "-...": "B", "-.-.": "C", "-..": "D", ".": "E",
+    "..-.": "F", "--.": "G", "....": "H", "..": "I", ".---": "J",
+    "-.-": "K", ".-..": "L", "--": "M", "-.": "N", "---": "O",
+    ".--.": "P", "--.-": "Q", ".-.": "R", "...": "S", "-": "T",
+    "..-": "U", "...-": "V", ".--": "W", "-..-": "X", "-.--": "Y",
+    "--..": "Z", "-----": "0", ".----": "1", "..---": "2", "...--": "3",
+    "....-": "4", ".....": "5", "-....": "6", "--...": "7", "---..": "8",
+    "----.": "9"
+  };
+
+  // Split the Morse code text into individual characters
+  const morseWords = text.trim().split("/");
+
+  // Decode each Morse code word and concatenate the decoded letters
+  let decodedText = "";
+  for (let morseWord of morseWords) {
+    // Split the Morse code word into individual characters
+    const morseChars = morseWord.split(/\s+/);
+    for (let morseChar of morseChars) {
+      if (patternMap.hasOwnProperty(morseChar)) {
+        decodedText += patternMap[morseChar];
+      }
+    }
+    // Add a space between words
+    decodedText += " ";
+  }
+
+  return decodedText.trim(); // Remove trailing space
 }
