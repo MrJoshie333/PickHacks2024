@@ -1,6 +1,9 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Retrieve selected text from local storage
+    
+  if (document.getElementById("selectedText")) {
+
+  // Retrieve selected text from local storage
     chrome.storage.local.get("selectedText", function(data) {
       var selectedText = data.selectedText;
       document.getElementById("selectedText").textContent = selectedText;
@@ -9,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     decryptedText = ""
     
     chrome.storage.local.get("mode", function(data) {
+
       var mode = data.mode;
 
       // Check if mode is "caesar"
@@ -20,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add event listener for 'input' event
         userInput.addEventListener('input', function(event) {
             var text = document.getElementById("selectedText").textContent;
-            document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+            document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value, true);
             var text = document.getElementById("decryptedText").textContent;
             document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
         });
@@ -88,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById("decryptedText").textContent = "Enter your two coefficients...";
           }
       });
-
+      
       userInput2.addEventListener('input', function(event) {
         var text = document.getElementById("selectedText").textContent;
           if (userInput.value !== "" && userInput2.value !== "") {
@@ -99,9 +103,12 @@ document.addEventListener('DOMContentLoaded', function() {
           else {
             document.getElementById("decryptedText").textContent = "Enter your two coefficients...";
           }
-    });
+          
+      });
       }
+
     });
+  }
 });
 
 function findBestDecryption(text) {
@@ -120,16 +127,17 @@ function findBestDecryption(text) {
   // Iterate over all possible rotation keys (0 to 25)
   for (let key = 0; key < 26; key++) {
     // Decrypt the text using the current rotation key
-    decryptedText = caesarCipher(text, key);
+    decryptedText = caesarCipher(text, key, true);
 
     // Calculate the similarity score of the decrypted text to English
-    const similarityScore = rateSimilarityToEnglish(decryptedText);
+    var similarityScore = rateSimilarityToEnglish(decryptedText);
 
     // Update the best decryption if the current decryption has higher similarity
     if (similarityScore < bestSimilarity) {
       bestSimilarity = similarityScore;
       bestDecryption = decryptedText;
-      cipher = "Caesar Cipher (" + key + ")";
+      originalShift = 26 - key;
+      cipher = "Caesar Cipher (" + originalShift + ")";
     }
   }
 

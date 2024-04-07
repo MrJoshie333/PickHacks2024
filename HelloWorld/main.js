@@ -53,63 +53,64 @@ chrome.runtime.onInstalled.addListener(function () {
 
 // A generic onclick callback function.
 function genericOnClick(info) {
+  if (info.selectionText) {
+    let selectedText = info.selectionText
 
-  let selectedText = info.selectionText
+    var popupWidth = 600;
+    var popupHeight = 400;
 
-  var popupWidth = 600;
-  var popupHeight = 400;
+    switch (info.menuItemId) {
+      case 'decrypt':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      
+      case 'caesar':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      case 'atbash':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      case 'affine':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      case 'railfence':
+        chrome.windows.create({
+          url: 'popup.html',
+          type: 'popup',
+          width: popupWidth,
+          height: popupHeight
+        });
+        break;
+      
+      
+      default:
+        // Standard context menu item function
+        console.log('Standard context menu item clicked.');
+    }
 
-  switch (info.menuItemId) {
-    case 'decrypt':
-      chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: popupWidth,
-        height: popupHeight
-      });
-      break;
-    
-    case 'caesar':
-      chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: popupWidth,
-        height: popupHeight
-      });
-      break;
-    case 'atbash':
-      chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: popupWidth,
-        height: popupHeight
-      });
-      break;
-    case 'affine':
-      chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: popupWidth,
-        height: popupHeight
-      });
-      break;
-    case 'railfence':
-      chrome.windows.create({
-        url: 'popup.html',
-        type: 'popup',
-        width: popupWidth,
-        height: popupHeight
-      });
-      break;
-    
-    
-    default:
-      // Standard context menu item function
-      console.log('Standard context menu item clicked.');
+    chrome.storage.local.set({ "selectedText": selectedText })
+    chrome.storage.local.set({"mode": info.menuItemId})
   }
-
-  chrome.storage.local.set({ "selectedText": selectedText })
-  chrome.storage.local.set({"mode": info.menuItemId})
 }
 
 
