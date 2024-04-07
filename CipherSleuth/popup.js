@@ -250,7 +250,13 @@ function findBestDecryption(text) {
 
   // ===== Morse Code =====
   decryptedText = morseDecode(text);
+  
   similarityScore = rateSimilarityToEnglish(decryptedText);
+  
+  if (/^[./\-\\ ]+$/.test(text)) {
+    return [decryptedText, "Morse Code"];
+  }
+
   if (similarityScore < bestSimilarity) {
     bestSimilarity = similarityScore;
     bestDecryption = decryptedText;
@@ -490,7 +496,6 @@ function morseDecode(text) {
 
   // Split the Morse code text into individual characters
   const morseWords = text.trim().split("/");
-
   // Decode each Morse code word and concatenate the decoded letters
   let decodedText = "";
   for (let morseWord of morseWords) {
