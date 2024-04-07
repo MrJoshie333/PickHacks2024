@@ -253,7 +253,7 @@ function findBestDecryption(text) {
   
   similarityScore = rateSimilarityToEnglish(decryptedText);
   
-  if (/^[./\-\\ ]+$/.test(text)) {
+  if (/^[./\-\\ ]+$/.test(text) && (text.includes('-') || text.includes('.'))) {
     return [decryptedText, "Morse Code"];
   }
 
