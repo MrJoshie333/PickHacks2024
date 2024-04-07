@@ -49,13 +49,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add event listener for 'input' event
         userInput.addEventListener('input', function(event) {
             var text = document.getElementById("selectedText").textContent;
-            if (userInput.value > 1) {
+            if (userInput.value > 1 && userInput.value < userInput.length) {
               document.getElementById("decryptedText").textContent = railFenceCipher(text, userInput.value);
               var text = document.getElementById("decryptedText").textContent;
               document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
             }
-            else {
+            else if (userInput.value < 2){
               document.getElementById("decryptedText").textContent = "Use a key of 2 or higher...";
+            }
+            else {
+              document.getElementById("decryptedText").textContent = "Sorry, key is too large...";
             }
         });
       }
