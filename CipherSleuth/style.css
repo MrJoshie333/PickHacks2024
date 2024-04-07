@@ -40,7 +40,7 @@ h2 {
 }
 h3 {
     font-family: "Chakra Petch", sans-serif;
-    font-size: 32px;
+    font-size: 15px;
     text-align: center;
 }
 
@@ -78,6 +78,10 @@ p {
 #userInput:focus, #userInput2:focus {
     border-color: rgb(102, 0, 8); /* Change border color on focus */
     box-shadow: 0 0 5px rgba(37, 2, 2, 0.5); /* Add a subtle shadow on focus */
+}
+
+#decryptedText {
+    color: limegreen;
 }
 
 .custom-link {

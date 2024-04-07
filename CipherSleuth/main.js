@@ -1,4 +1,8 @@
 chrome.runtime.onInstalled.addListener(function () {
+  const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
+  chrome.runtime.onStartup.addListener(keepAlive);
+  keepAlive();
+  
   // Create one test item for each context type.
   let contexts = [
     'page',
