@@ -31,7 +31,7 @@ alongside some other back-end checks, and you get an "English Score"!
 
 Feel free to try out CipherSleuth for yourself! Here's how:
 1. Download the CipherSleuth folder from this repository
-2. Visit <a href="chrome://extensions" target="_blank">chrome://extensions</a> in your browser (assuming you're using Chrome)
+2. Visit <a href="chrome://extensions">chrome://extensions</a> in your browser (assuming you're using Chrome)
 3. In the top right corner, make sure "Developer Mode" is enabled
 4. Click "Load Unpacked" at the top of the screen, and open the CipherSleuth folder
 5. You're done! Feel free to use CipherSleuth, and keep an eye on the Web Store for future releases!
