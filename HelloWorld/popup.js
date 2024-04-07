@@ -6,11 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("selectedText").textContent = selectedText;
     });
   
-    // Retrieve decrypted result text from local storage
-    chrome.storage.local.get("decryptedText", function(data) {
-      var decryptedText = data.decryptedText;
-      document.getElementById("decryptedText").textContent = decryptedText;
-    });
+    decryptedText = ""
     
     chrome.storage.local.get("mode", function(data) {
       var mode = data.mode;
@@ -18,17 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
       // Check if mode is "caesar"
       if (mode === "caesar") {
         document.getElementById('title').textContent = "Caesar Cipher"
-          var userInput = document.getElementById('userInput');
-          // Show the input element
-          userInput.style.display = 'inline-block';
-          // Add event listener for 'input' event
-          userInput.addEventListener('input', function(event) {
-              var text = document.getElementById("selectedText").textContent;
-              document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
-              // document.getElementById("decryptedText").textContent = findBestDecryption(text)
-
-              var decrypted = document.getElementById("decryptedText").textContent;
-          });
+        var userInput = document.getElementById('userInput');
+        // Show the input element
+        userInput.style.display = 'inline-block';
+        // Add event listener for 'input' event
+        userInput.addEventListener('input', function(event) {
+            var text = document.getElementById("selectedText").textContent;
+            document.getElementById("decryptedText").textContent = caesarCipher(text, userInput.value);
+        });
       }
       else if (mode == "atbash") {
         document.getElementById('title').textContent = "Atbash Cipher"
@@ -42,15 +35,24 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('title').textContent = "Detected: " + result[1];
         
       }
-      else if (mode === "vigenere") {
-        document.getElementById('title').textContent = "Vigenere Cipher"
-        var text = document.getElementById('selectedText').textContent;
-        document.getElementById("decryptedText").textContent = vigenereCipher(text);
-      }
       else if (mode === "railfence") {
         document.getElementById('title').textContent = "Rail Fence Cipher"
-        var text = document.getElementById('selectedText').textContent;
-        document.getElementById("decryptedText").textContent = railfenceCipher(text);
+        var userInput = document.getElementById('userInput');
+        // Show the input element
+        userInput.style.display = 'inline-block';
+        // Add event listener for 'input' event
+        userInput.addEventListener('input', function(event) {
+            var text = document.getElementById("selectedText").textContent;
+            if (userInput.value > 1) {
+              document.getElementById("decryptedText").textContent = railFenceCipher(text, userInput.value);
+            }
+            else {
+              document.getElementById("decryptedText").textContent = "Use a key of 2 or higher...";
+            }
+        });
+      }
+      else if (mode === "vigenere") {
+        ;
       }
       var text = document.getElementById("decryptedText").textContent;
       document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
@@ -99,6 +101,23 @@ function findBestDecryption(text) {
       cipher = "Atbash Cipher";
   }
 
+  // ===== Rail Fence Cipher =====
+
+  // for (let rails = 2; rails <= text.length; rails++) {
+  //   // Decrypt the text using the current number of rails
+  //   decryptedText = railFenceCipher(text, rails);
+
+  //   // Calculate the similarity score of the decrypted text to English
+  //   similarityScore = rateSimilarityToEnglish(decryptedText);
+
+  //   // Update the best decryption if the current decryption has higher similarity
+  //   if (similarityScore < bestSimilarity) {
+  //     bestSimilarity = similarityScore;
+  //     bestDecryption = decryptedText;
+  //     cipher = "Rail Fence Cipher (" + rails + " rails)";
+  //   }
+  // }
+
   return [bestDecryption, cipher];
 }
 
@@ -121,7 +140,7 @@ function rateSimilarityToEnglish(text) {
       "bet", "better", "between", "big", "black", "blue", "boat", "body", "book", "both", "bottom", "box", "boy", "bring", 
       "brought", "build", "built", "but", "by", "called", "came", "can", "can't", "cannot", "car", "care", "carefully", "carry", 
       "center", "certain", "change", "check", "children", "city", "class", "close", "cold", "come", "common", "complete", "could", 
-      "country", "course", "cut", "dark", "day", "deep", "did", "didn't", "different", "distance", "do", "does", "dog", "don’t", 
+      "country", "course", "cut", "dark", "day", "deep", "did", "didn't", "different", "distance", "do", "does", "dog", "don't", 
       "done", "door", "down", "draw", "dry", "during", "each", "early", "earth", "easy", "eat", "either", "else", "end", "English", 
       "enough", "even", "ever", "every", "everyone", "everything", "example", "face", "fact", "fall", "family", "far", "fast", "father", 
       "feel", "feet", "felt", "few", "field", "finally", "find", "fine", "fire", "first", "fish", "five", "floor", "follow", "food", "foot", 
@@ -220,4 +239,46 @@ function atbashCipher(text) {
     }
   }
   return cipher;
+}
+
+// function to decrypt a message
+function railFenceCipher(cipher, key) {
+  // Create an empty 2D array to represent the rail matrix
+  let dir_down = false;
+  let row = 0, col = 0;
+  let rail = [];
+  for (let i = 0; i < key; i++) {
+    rail.push([]);
+    for (let j = 0; j < cipher.length; j++) {
+      rail[i].push(' ');
+    }
+  }
+
+  // Filling the rail matrix with the ciphertext
+  for (let i = 0; i < cipher.length; i++) {
+    // Check the direction of flow
+    if (row === 0 || row === key - 1) {
+      dir_down = !dir_down;
+    }
+
+    // Place the character at the corresponding position in the rail matrix
+    current = cipher[i]
+    rail[row][col] = current;
+    col++;
+
+    // Find the next row using the direction flag
+    dir_down ? row++ : row--;
+  }
+
+  // Construct the resultant text by reading the matrix in a zig-zag manner
+  let result = '';
+  for (let i = 0; i < key; i++) {
+    for (let j = 0; j < cipher.length; j++) {
+      if (rail[i][j] !== '\n') {
+        result += rail[i][j];
+      }
+    }
+  }
+
+  return result;
 }
