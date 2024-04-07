@@ -92,7 +92,7 @@ function findBestDecryption(text) {
 
   decryptedText = atbashCipher(text);
   // Calculate the similarity score of the decrypted text to English
-  const similarityScore = rateSimilarityToEnglish(decryptedText);
+  var similarityScore = rateSimilarityToEnglish(decryptedText);
 
   // Update the best decryption if the current decryption has higher similarity
   if (similarityScore < bestSimilarity) {
@@ -103,20 +103,20 @@ function findBestDecryption(text) {
 
   // ===== Rail Fence Cipher =====
 
-  // for (let rails = 2; rails <= text.length; rails++) {
-  //   // Decrypt the text using the current number of rails
-  //   decryptedText = railFenceCipher(text, rails);
+  for (let rails = 2; rails <= text.length; rails++) {
+    // Decrypt the text using the current number of rails
+    decryptedText = railFenceCipher(text, rails);
 
-  //   // Calculate the similarity score of the decrypted text to English
-  //   similarityScore = rateSimilarityToEnglish(decryptedText);
+    // Calculate the similarity score of the decrypted text to English
+    similarityScore = rateSimilarityToEnglish(decryptedText);
 
-  //   // Update the best decryption if the current decryption has higher similarity
-  //   if (similarityScore < bestSimilarity) {
-  //     bestSimilarity = similarityScore;
-  //     bestDecryption = decryptedText;
-  //     cipher = "Rail Fence Cipher (" + rails + " rails)";
-  //   }
-  // }
+    // Update the best decryption if the current decryption has higher similarity
+    if (similarityScore < bestSimilarity) {
+      bestSimilarity = similarityScore;
+      bestDecryption = decryptedText;
+      cipher = "Rail Fence Cipher (" + rails + " rails)";
+    }
+  }
 
   return [bestDecryption, cipher];
 }
@@ -160,7 +160,7 @@ function rateSimilarityToEnglish(text) {
       "set", "several", "shall", "she", "ship", "short", "should", "show", "shown", "side", "simple", "since", "six", "size", "sky", "small", "snow", 
       "so", "some", "someone", "something", "soon", "sound", "space", "special", "stand", "start", "state", "stay", "still", "stood", "stop", "story", 
       "strong", "study", "such", "suddenly", "summer", "sun", "sure", "surface", "system", "table", "take", "talk", "tall", "tell", "ten", "than", "that", 
-      "that’s", "the", "their", "them", "themselves", "then", "there", "these", "they", "thing", "think", "third", "this", "those", "though", "thought", 
+      "that's", "the", "their", "them", "themselves", "then", "there", "these", "they", "thing", "think", "third", "this", "those", "though", "thought", 
       "three", "through", "time", "tiny", "to", "today", "together", "told", "too", "took", "top", "toward", "town", "tree", "true", "try", "turn", 
       "turned", "two", "under", "understand", "United States", "until", "up", "upon", "us", "use", "usually", "very", "voice", "walk", "walked", 
       "want", "warm", "was", "watch", "water", "way", "we", "weather", "well", "went", "were", "what", "when", "where", "whether", "which", "while", 
@@ -186,13 +186,25 @@ function rateSimilarityToEnglish(text) {
       }
   }
 
+  // // Check the presence of common English words in the text
+  // const words = text.toLowerCase().split(/[^\w']+/);
+  // for (let word of words) {
+  //     if (commonWords.includes(word)) {
+  //       score -= (5 * words.filter(x => x==word).length); // Adjust the score for each common English word found
+  //     }
+  // }
+
   // Check the presence of common English words in the text
-  const words = text.toLowerCase().split(/[^\w']+/);
-  for (let word of words) {
-      if (commonWords.includes(word)) {
-        score -= (5 * words.filter(x => x==word).length); // Adjust the score for each common English word found
-      }
-  }
+const words = text.toLowerCase().split(/[^a-zA-Z']+|'(?![a-zA-Z])/); // Split by non-alphabetic characters but keep single quotes intact
+for (let word of words) {
+    // Include the word and its subwords (if any)
+    for (let i = 1; i <= word.length; i++) {
+        const subword = word.substring(0, i);
+        if (commonWords.includes(subword)) {
+            score -= 5;
+        }
+    }
+}
 
   return score;
 }
@@ -241,44 +253,24 @@ function atbashCipher(text) {
   return cipher;
 }
 
-// function to decrypt a message
-function railFenceCipher(cipher, key) {
-  // Create an empty 2D array to represent the rail matrix
-  let dir_down = false;
-  let row = 0, col = 0;
-  let rail = [];
-  for (let i = 0; i < key; i++) {
-    rail.push([]);
-    for (let j = 0; j < cipher.length; j++) {
-      rail[i].push(' ');
-    }
+function makeFence(len, n) {
+  var i, pip, period = 2 * (n - 1);
+  var rows = [];
+  for (i = 0; i < n; i++) {
+    rows.push([]); // Initialize each element of the list as an empty array
   }
-
-  // Filling the rail matrix with the ciphertext
-  for (let i = 0; i < cipher.length; i++) {
-    // Check the direction of flow
-    if (row === 0 || row === key - 1) {
-      dir_down = !dir_down;
-    }
-
-    // Place the character at the corresponding position in the rail matrix
-    current = cipher[i]
-    rail[row][col] = current;
-    col++;
-
-    // Find the next row using the direction flag
-    dir_down ? row++ : row--;
+  for (i = 0; i < len; i++) {
+    pip = i % period;
+    r = pip < (n - 1) ? pip : period - pip;
+    rows[r].push(i);
   }
+  // Concatenate all sub-arrays into a single array
+  return rows.reduce((acc, val) => acc.concat(val), []);
+}
 
-  // Construct the resultant text by reading the matrix in a zig-zag manner
-  let result = '';
-  for (let i = 0; i < key; i++) {
-    for (let j = 0; j < cipher.length; j++) {
-      if (rail[i][j] !== '\n') {
-        result += rail[i][j];
-      }
-    }
-  }
-
-  return result;
+function railFenceCipher(text, n) {
+  var i, len = text.length, mapped = makeFence(len,n), result = "";
+  return text.split('').reduce(function(p,c,i,a){ return p + a[mapped.indexOf(i)]},'');
+  for( i = 0; i < len; i++) result += text.substr( mapped.indexOf( i), 1);
+  return result;  
 }
