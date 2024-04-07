@@ -43,10 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
       }
       else if (mode === "vigenere") {
-        ;
+        document.getElementById('title').textContent = "Vigenere Cipher"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = vigenereCipher(text);
       }
       else if (mode === "railfence") {
-        ;
+        document.getElementById('title').textContent = "Rail Fence Cipher"
+        var text = document.getElementById('selectedText').textContent;
+        document.getElementById("decryptedText").textContent = railfenceCipher(text);
       }
       var text = document.getElementById("decryptedText").textContent;
       document.getElementById("score").textContent = "English Score: " + rateSimilarityToEnglish(text);
