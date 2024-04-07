@@ -26,3 +26,12 @@ To start, we use a table of English character frequencies, with a more similar p
 Then, we compiled a list of the 500 most common English words (which we could expand in future), allowing us to recognize shorter
 cipher texts as long as they contain some recognizeable words. The number you see on the screen is a culmination of those factors,
 alongside some other back-end checks, and you get an "English Score"! 
+
+## Try it Yourself!
+
+Feel free to try out CipherSleuth for yourself! Here's how:
+1. Download the CipherSleuth folder from this repository
+2. Visit chrome://extensions in your browser (assuming you're using Chrome)
+3. In the top right corner, make sure "Developer Mode" is enabled
+4. Click "Load Unpacked" at the top of the screen, and open the CipherSleuth folder
+5. You're done! Feel free to use CipherSleuth, and keep an eye on the Web Store for future releases!
