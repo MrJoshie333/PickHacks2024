@@ -442,11 +442,10 @@ function binaryDecode(str) {
 function hexDecode(hex) {
   // initialize the ASCII code string as empty.
   var ascii = "";
-
+  hex = hex.split(" ").join("")
   for (var i = 0; i < hex.length; i += 2) {
     // extract two characters from hex string
     var part = hex.substring(i, i + 2);
-
     // change it into base 16 and
     // typecast as the character
     var ch = String.fromCharCode(parseInt(part, 16));
