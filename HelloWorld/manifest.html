@@ -9,13 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
-<!-- <style>
-  body {
-      width: 200px; /* Set the width of the popup */
-      height: 300px; /* Set the height of the popup */
-      padding: 10px;
-  }
-</style> -->
 </head>
 
 
@@ -44,9 +37,9 @@
   </section>
 
   <section id="vigenere">
-      <h2>Vigenère Cipher</h2>
+      <h2>Affine Cipher</h2>
       <p>
-          The Vigenère Cipher is a polyalphabetic substitution cipher that uses a keyword to shift letters multiple times in the encryption process. Each letter in the keyword determines the amount of shift to apply to the corresponding letter in the plaintext. It's more secure than a Caesar Cipher because the shifting varies based on the keyword.
+        The Affine cipher is a type of substitution cipher, where each letter in the ciphertext is mapped to its numeric equivalent, encrypted using a simple mathematical function, and converted back to a letter. The formula used means that each letter encrypts to one other letter, and back again, meaning the cipher is essentially a standard substitution cipher with a rule governing which letter goes to which. As such, it has the weaknesses of all substitution ciphers. Each letter is enciphered with the function (ax + b) mod 26, where b is the magnitude of the shift.
       </p>
   </section>
 
